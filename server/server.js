@@ -1228,11 +1228,12 @@ app.use((req, res) => {
 //     console.log(`🎹 samplekitsStore: http://localhost:${PORT}/samplekits.html`);
 // });
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
+app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
+    const port = process.env.PORT || 3000;
+    console.log(`🚀 Server running on http://0.0.0.0:${port}`);
     console.log(`📁 Uploads: ${uploadsDir}`);
-    console.log(`🎵 Admin panel: http://0.0.0.0:${PORT}/admin.html`);
-    console.log(`🏠 Store: http://0.0.0.0:${PORT}/beats.html`);
-    console.log(`🥁 DrumKitStore: http://0.0.0.0:${PORT}/drumkits.html`);
-    console.log(`🎹 samplekitsStore: http://0.0.0.0:${PORT}/samplekits.html`);
+    console.log(`🎵 Admin panel: http://0.0.0.0:${port}/admin.html`);
+    console.log(`🏠 Store: http://0.0.0.0:${port}/beats.html`);
+    console.log(`🥁 DrumKitStore: http://0.0.0.0:${port}/drumkits.html`);
+    console.log(`🎹 samplekitsStore: http://0.0.0.0:${port}/samplekits.html`);
 });
