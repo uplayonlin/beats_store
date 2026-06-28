@@ -6,10 +6,6 @@ meta:
 build:
   dockerfile: Dockerfile
 
-run:
-  commands:
-    - node server/server.js
-
 port: 3000
 
 env:
