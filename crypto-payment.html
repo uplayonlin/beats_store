@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Payment - @ariawave</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: #0a0a0a;
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .payment-container { max-width: 600px; margin: 0 auto; }
+        .payment-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+        }
+        .crypto-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .crypto-option {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .crypto-option:hover {
+            border-color: #901a1a;
+            transform: translateY(-2px);
+        }
+        .crypto-option.selected {
+            border-color: #4caf50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        .crypto-option i { font-size: 2rem; margin-bottom: 8px; }
+        .crypto-option.btc i { color: #f7931a; }
+        .crypto-option.eth i { color: #627eea; }
+        .crypto-option.usdt i { color: #26a17b; }
+        .crypto-option.usdc i { color: #2775ca; }
+        .crypto-option.ltc i { color: #345d9d; }
+        .crypto-option.trx i { color: #ff060a; }
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        .qr-container img { width: 250px; height: 250px; }
+        .wallet-address {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        .copy-btn {
+            background: #901a1a;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .copy-btn:hover { background: #e04f54; }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .status-waiting { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .status-confirming { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
+        .status-paid { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+        .timer {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffc107;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .success-view { text-align: center; padding: 40px 20px; }
+        .success-icon {
+            font-size: 5rem;
+            color: #4caf50;
+            margin-bottom: 20px;
+            animation: pop 0.5s ease;
+        }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .download-btn {
+            background: #4caf50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .download-btn:hover { background: #45a049; color: white; }
+        .info-box {
+            background: rgba(144, 26, 26, 0.1);
+            border: 1px solid rgba(144, 26, 26, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .info-box i { color: #e04f54; margin-right: 8px; }
+        .pay-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e04f54;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .order-summary {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .spinner-border { width: 3rem; height: 3rem; }
+        .payment-link-btn {
+            background: #2196f3;
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 15px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .payment-link-btn:hover {
+            background: #1976d2;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="text-center">
+            <div class="spinner-border text-danger" role="status"></div>
+            <p class="mt-3">Creating payment...</p>
+        </div>
+    </div>
+
+    <div class="payment-container">
+        <!-- Выбор криптовалюты -->
+        <div id="cryptoSelectView" class="payment-card">
+            <h2 class="mb-4">
+                <i class="fas fa-coins me-2 text-warning"></i>Pay with Crypto
+            </h2>
+            
+            <div class="order-summary" id="orderSummary"></div>
+
+            <h5 class="mb-3">Select Cryptocurrency:</h5>
+            <div class="crypto-selector" id="cryptoSelector">
+                <div class="crypto-option usdt selected" data-currency="USDT_TRC20" onclick="selectCrypto('USDT_TRC20')">
+                    <i class="fas fa-dollar-sign"></i>
+                    <div>USDT TRC20</div>
+                    <small class="text-white-50">Low fee</small>
+                </div>
+                <div class="crypto-option btc" data-currency="BTC" onclick="selectCrypto('BTC')">
+                    <i class="fab fa-bitcoin"></i>
+                    <div>Bitcoin</div>
+                </div>
+                <div class="crypto-option eth" data-currency="ETH" onclick="selectCrypto('ETH')">
+                    <i class="fab fa-ethereum"></i>
+                    <div>Ethereum</div>
+                </div>
+                <div class="crypto-option usdc" data-currency="USDC_ERC20" onclick="selectCrypto('USDC_ERC20')">
+                    <i class="fas fa-coins"></i>
+                    <div>USDC</div>
+                </div>
+                <div class="crypto-option ltc" data-currency="LTC" onclick="selectCrypto('LTC')">
+                    <i class="fas fa-coins"></i>
+                    <div>Litecoin</div>
+                </div>
+                <div class="crypto-option trx" data-currency="TRX" onclick="selectCrypto('TRX')">
+                    <i class="fas fa-coins"></i>
+                    <div>Tron</div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i>
+                <strong>Recommended:</strong> USDT TRC20 has the lowest fees (~$1) and fast confirmation.
+            </div>
+
+            <button class="btn btn-danger w-100 py-3" onclick="createPayment()">
+                <i class="fas fa-arrow-right me-2"></i>Continue to Payment
+            </button>
+        </div>
+
+        <!-- Оплата -->
+        <div id="paymentView" class="payment-card" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h4><i class="fas fa-qrcode me-2"></i>Send Payment</h4>
+                <div class="status-badge status-waiting" id="statusBadge">
+                    <i class="fas fa-clock"></i>
+                    <span id="statusText">Waiting for payment</span>
+                </div>
+            </div>
+
+            <div class="pay-amount">
+                <span id="cryptoAmount">0</span> <span id="cryptoCurrency">USDT</span>
+            </div>
+
+            <div class="text-center">
+                <div class="qr-container">
+                    <img id="qrCode" src="" alt="QR Code">
+                </div>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                Send <strong>EXACTLY</strong> the amount shown above to the address below.
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Wallet Address:</label>
+                <div class="wallet-address" id="walletAddress"></div>
+                <button class="copy-btn" onclick="copyAddress()">
+                    <i class="fas fa-copy me-2"></i>Copy Address
+                </button>
+            </div>
+
+            <div class="timer">
+                <i class="fas fa-hourglass-half me-2"></i>
+                <span id="timeRemaining">24:00:00</span>
+            </div>
+
+            <a id="paymentLinkBtn" href="#" target="_blank" class="payment-link-btn">
+                <i class="fas fa-external-link-alt me-2"></i>Open Payment Page
+            </a>
+
+            <div class="text-center mt-3">
+                <small class="text-white-50">
+                    <i class="fas fa-shield-alt me-1"></i>
+                    Payment will be confirmed automatically after blockchain confirmation
+                </small>
+            </div>
+
+            <button class="btn btn-outline-secondary w-100 mt-3" onclick="location.reload()">
+                <i class="fas fa-undo me-2"></i>Change Currency
+            </button>
+        </div>
+
+        <!-- Успех -->
+        <div id="successView" class="payment-card" style="display: none;">
+            <div class="success-view">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h2 class="mb-3">Payment Confirmed!</h2>
+                <p class="text-white-50 mb-4">
+                    Thank you! Your order <strong id="successOrderId">#0</strong> has been paid.<br>
+                    A receipt has been sent to <strong id="successEmail"></strong>
+                </p>
+                
+                <h5 class="mb-3"><i class="fas fa-download me-2"></i>Download your files:</h5>
+                <div id="downloadLinks"></div>
+
+                <div class="mt-4">
+                    <a href="beats.html" class="btn btn-outline-light">
+                        <i class="fas fa-store me-2"></i>Back to Store
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let currentOrder = null;
+        let selectedCurrency = 'USDT_TRC20';
+        let paymentData = null;
+        let pollingInterval = null;
+        let countdownInterval = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderData = sessionStorage.getItem('currentOrder');
+            if (!orderData) {
+                alert('No order found. Redirecting to store...');
+                window.location.href = 'beats.html';
+                return;
+            }
+
+            currentOrder = JSON.parse(orderData);
+            renderOrderSummary();
+        });
+
+        function renderOrderSummary() {
+            const summary = document.getElementById('orderSummary');
+            let html = `<h6 class="mb-3">Order #${currentOrder.orderId}</h6>`;
+
+            currentOrder.items.forEach(item => {
+                const icon = item.type === 'beat' ? 'fa-music' : 
+                            item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
+                html += `
+                    <div class="d-flex justify-content-between mb-1 small">
+                        <span><i class="fas ${icon} me-2 text-danger"></i>${item.title}</span>
+                        <span>$${item.price.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+
+            if (currentOrder.discount > 0) {
+                html += `
+                    <div class="d-flex justify-content-between text-success small mt-2">
+                        <span>Discount:</span>
+                        <span>-$${currentOrder.discount.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div class="d-flex justify-content-between pt-2 mt-2 border-top border-secondary">
+                    <strong>Total:</strong>
+                    <strong class="text-danger">$${currentOrder.total.toFixed(2)}</strong>
+                </div>
+            `;
+
+            summary.innerHTML = html;
+        }
+
+        function selectCrypto(currency) {
+            selectedCurrency = currency;
+            document.querySelectorAll('.crypto-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.dataset.currency === currency);
+            });
+        }
+
+        async function createPayment() {
+            const loading = document.getElementById('loadingOverlay');
+            loading.style.display = 'flex';
+
+            try {
+                const response = await fetch(`${API_URL}/crypto/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: currentOrder.orderId,
+                        amount: currentOrder.total,
+                        email: currentOrder.email,
+                        cryptocurrency: selectedCurrency
+                    })
+                });
+
+                const data = await response.json();
+                loading.style.display = 'none';
+
+                if (response.ok) {
+                    paymentData = data;
+                    showPaymentView();
+                    startPolling();
+                    startCountdown();
+                } else {
+                    alert('Error creating payment: ' + data.error);
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                alert('Failed to create payment: ' + error.message);
+            }
+        }
+
+        function showPaymentView() {
+            document.getElementById('cryptoSelectView').style.display = 'none';
+            document.getElementById('paymentView').style.display = 'block';
+
+            document.getElementById('qrCode').src = paymentData.qrCode;
+            document.getElementById('cryptoAmount').textContent = 
+                parseFloat(paymentData.amount).toFixed(6);
+            document.getElementById('cryptoCurrency').textContent = 
+                paymentData.currency;
+            document.getElementById('walletAddress').textContent = paymentData.address;
+            document.getElementById('paymentLinkBtn').href = paymentData.paymentLink;
+        }
+
+        function copyAddress() {
+            navigator.clipboard.writeText(paymentData.address).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
+                setTimeout(() => btn.innerHTML = original, 2000);
+            });
+        }
+
+        function startPolling() {
+            pollingInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`${API_URL}/crypto/status/${paymentData.invoiceUuid}`);
+                    const data = await response.json();
+
+                    updateStatus(data.status);
+
+                    if (data.status === 'paid' || data.invoiceStatus === 'success') {
+                        clearInterval(pollingInterval);
+                        clearInterval(countdownInterval);
+                        showSuccess();
+                    } else if (data.status === 'canceled') {
+                        clearInterval(pollingInterval);
+                        clearInterval(countdownInterval);
+                        alert('Payment canceled. Please try again.');
+                        location.reload();
+                    }
+                } catch (error) {
+                    console.error('Polling error:', error);
+                }
+            }, 15000);
+        }
+
+        function updateStatus(status) {
+            const badge = document.getElementById('statusBadge');
+            const text = document.getElementById('statusText');
+            
+            badge.className = 'status-badge';
+            
+            switch(status) {
+                case 'created':
+                    badge.classList.add('status-waiting');
+                    text.textContent = 'Waiting for payment';
+                    break;
+                case 'partial':
+                    badge.classList.add('status-confirming');
+                    text.textContent = 'Partially paid';
+                    break;
+                case 'paid':
+                case 'success':
+                    badge.classList.add('status-paid');
+                    text.textContent = 'Paid!';
+                    break;
+            }
+        }
+
+        function startCountdown() {
+            const expiryDate = new Date(paymentData.expiryDate);
+            const now = new Date();
+            let timeLeft = Math.floor((expiryDate - now) / 1000);
+
+            if (timeLeft < 0) timeLeft = 24 * 60 * 60;
+
+            countdownInterval = setInterval(() => {
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+                
+                document.getElementById('timeRemaining').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    alert('Payment time expired. Please create a new payment.');
+                    location.reload();
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        function showSuccess() {
+            document.getElementById('paymentView').style.display = 'none';
+            document.getElementById('successView').style.display = 'block';
+            document.getElementById('successOrderId').textContent = '#' + currentOrder.orderId;
+            document.getElementById('successEmail').textContent = currentOrder.email;
+
+            const downloadLinks = document.getElementById('downloadLinks');
+            let html = '';
+
+            currentOrder.items.forEach(item => {
+                const itemId = item.id || item.beatId;
+                const icon = item.type === 'beat' ? 'fa-music' : 
+                            item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
+                html += `
+                    <a href="${API_URL}/orders/${currentOrder.orderId}/download/${item.type}/${itemId}" 
+                       class="download-btn">
+                        <i class="fas ${icon} me-2"></i>${item.title}
+                    </a>
+                `;
+            });
+
+            downloadLinks.innerHTML = html;
+
+            localStorage.removeItem('ariawave_cart');
+            sessionStorage.removeItem('currentOrder');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: ariawave-beats
+    env: node
+    buildCommand: npm install
+    startCommand: node server/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: TRYBIT_API_KEY
+        sync: false
+      - key: TRYBIT_SHOP_ID
+        sync: false
+      - key: TRYBIT_SECRET_KEY
+        sync: false
+      - key: FRONTEND_URL
+        value: https://ariawave-beats.onrender.com
+      - key: BACKEND_URL
+        value: https://ariawave-beats.onrender.com

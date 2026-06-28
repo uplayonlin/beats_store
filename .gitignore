@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Environment
+.env
+
+# Database
+database.sqlite
+server/database.sqlite
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Uploaded files - НЕ загружаем в git
+source/audio/
+source/archives/
+source/images/beats/
+source/images/drumkits/
+source/images/samplekits/
+source/videos/drumkits/
+source/videos/samplekits/
+source/video/
+source/zip/
+
+# Загружаем только логотип и основные картинки
+!source/images/logo.png
+!source/images/beats.png
+!source/images/drum-kit.png
+!source/images/drums.png
+!source/images/home.png
+!source/images/youtube.png
+!source/images/telegram.png
+!source/images/beget_token.png
+!source/images/facemnepoxui.png
+!source/images/hips.png
+!source/images/jerk.png

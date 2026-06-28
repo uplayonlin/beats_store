@@ -1,0 +1,443 @@
+.navbar-brand img:hover {
+    transform: scale(1.1);
+}
+.navbar-brand img {
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Плавный переход для всех элементов */
+.hero-section>* {
+    will-change: opacity, transform;
+}
+
+/* Убираем скачок при загрузке */
+body {
+    overflow-x: hidden;
+}
+
+/* Всплывашка о том что не доделано */
+.work-toast {
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 0 0 30px rgba(255, 107, 107, 0.3);
+}
+
+.work-toast .toast-header {
+    background: rgba(255, 107, 107, 0.2);
+    border-bottom: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.work-toast>.toast-header>.me-auto {
+    color: #fff;
+}
+
+.work-toast .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+/* Конец всплывашка о том что не доделано */
+.row {
+    justify-content: space-between;
+}
+
+.home-cards-section .mycardmargin>.card-body {
+    margin-top: 120px;
+}
+
+
+/* Секция на весь экран */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* 100% от высоты экрана */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    /* Текст на видео лучше делать белым */
+    text-align: center;
+}
+
+/* Стили для самого видео */
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Видео заполняет экран, обрезая лишнее без искажений */
+    z-index: -2;
+    /* Отправляем видео на задний план */
+}
+
+/* Затемняющий оверлей */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Черный цвет с прозрачностью 50% */
+    z-index: -1;
+    /* Находится поверх видео, но под контентом */
+}
+
+/* Контент поверх всего */
+.hero-content {
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+}
+
+.col {
+    text-align: center;
+}
+
+.home-cards-section .card {
+    background: rgba(255, 255, 255, 0.115);
+    /* полупрозрачный фон */
+    backdrop-filter: blur(10px) saturate(180%);
+    /* размытие + усиление насыщенности */
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    /* для WebKit */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    /* стеклянная граница */
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+}
+
+.home-cards-section .card-body {
+    text-align: left;
+    max-width: 250px;
+    max-height: 100px;
+}
+.home-cards-section  .card-body>h5 {
+    text-align: center
+}
+.home-cards-section .card-body>p {
+    font-size: 15px;
+}
+
+.btn-custom {
+    background-color: #901a1a;
+    border-color: #6e1313;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.btn-custom:hover {
+    background-color: #e04f54;
+    border-color: #6e1313;
+    color: #fff;
+}
+
+.btn-custom:focus,
+.btn-custom:active {
+    background-color: #901a1a;
+    border-color: #6e1313;
+    color: #fff;
+}
+/* плеер */
+.audio-player {
+    background-color: rgba(255, 255, 255, 0.205);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-top: 55px;
+
+}
+
+.playlist-container .collapse.show+button #playlistToggleText,
+.playlist-container [aria-expanded="true"] #playlistToggleText {
+    /* Стили для развёрнутого состояния */
+}
+
+.player-container {
+    padding: 12px;
+    background: linear-gradient(135deg, #000000, #000000);
+    color: rgba(255, 255, 255, 0.414);
+    border-style: solid;
+    border-radius: 20px;
+}
+
+.player-head {
+    margin-bottom: 45px;
+}
+
+
+.player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: 0 10px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.play-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.progress-bar {
+    flex-grow: 1;
+    margin: 0 10px;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#current-time,
+#duration {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    min-width: 40px;
+    text-align: center;
+}
+
+.volume-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.volume-icon {
+    margin-right: 10px;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.volume-bar {
+    flex-grow: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.volume-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.track-info {
+    text-align: center;
+}
+
+.track-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.track-artist {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.playlist-container {
+    padding: 20px;
+}
+
+.playlist-container h3 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+}
+
+.playlist {
+    list-style: none;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+}
+
+.playlist-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    /* Выравнивание по центру */
+    gap: 15px;
+    /* Отступ между элементами */
+}
+
+.playlist-item:last-child {
+    border-bottom: none;
+}
+
+.playlist-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.playlist-item.playing {
+    background-color: rgba(223, 26, 26, 0.2);
+    font-weight: bold;
+}
+
+/* Стили для обложки */
+.playlist-cover {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    /* Чтобы картинка не сжималась */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Информация о треке */
+.playlist-info {
+    flex-grow: 1;
+    text-align: left;
+    overflow: hidden;
+    min-width: 0;
+    /* Важно для text-overflow */
+}
+
+.playlist-title {
+    font-weight: 600;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: inherit;
+}
+
+.playlist-artist {
+    font-size: 14px;
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.playlist-item .song-duration {
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    white-space: nowrap;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.playlist-item.playing .song-duration {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .audio-player {
+        flex-direction: column;
+    }
+
+    .player-container {
+        padding: 20px 15px;
+    }
+
+    .control-btn {
+        width: 45px;
+        height: 45px;
+        margin: 0 8px;
+    }
+
+    .play-btn {
+        width: 55px;
+        height: 55px;
+    }
+
+    .track-title {
+        font-size: 18px;
+    }
+
+    .track-artist {
+        font-size: 14px;
+    }
+
+    .playlist-container {
+        padding: 15px;
+    }
+}
+
+/* Стили для скроллбара плейлиста */
+.playlist::-webkit-scrollbar {
+    width: 6px;
+}
+
+.playlist::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.playlist::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.playlist::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}

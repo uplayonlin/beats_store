@@ -1,0 +1,272 @@
+body {
+    background: #1a1a1a;
+    color: white;
+    min-height: 100vh;
+}
+/* ============================================
+   FILTER STYLES
+   ============================================ */
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.filter-select {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    min-width: 180px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba(255,255,255,0.7)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+    background-size: 16px 12px !important;
+    padding-right: 2.5rem !important;
+}
+
+.filter-select:focus {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border-color: #901a1a !important;
+    box-shadow: 0 0 0 0.2rem rgba(144, 26, 26, 0.25) !important;
+    color: white !important;
+}
+
+.filter-select option {
+    background: #2a2a2a !important;
+    color: white !important;
+    padding: 8px;
+}
+
+.filter-select:hover {
+    border-color: rgba(144, 26, 26, 0.5) !important;
+}
+
+/* Стили для order cards */
+.order-card h6 {
+    color: white !important;
+    font-weight: 600;
+}
+
+.order-card .fw-bold {
+    color: white;
+}
+
+.order-items img,
+.order-items video {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-success {
+    background: #4caf50;
+    border-color: #4caf50;
+    color: white !important;
+}
+
+.btn-success:hover {
+    background: #45a049;
+    border-color: #45a049;
+}
+
+/* Адаптивность для фильтров */
+@media (max-width: 768px) {
+    .filter-group {
+        width: 100%;
+    }
+    
+    .filter-select {
+        flex: 1;
+        min-width: auto;
+    }
+}
+.mt-1>strong {
+    color: white;
+}
+/* Order Cards */
+.order-card h6 {
+    color: white !important;
+    font-weight: 600;
+}
+
+.order-card .fw-bold {
+    color: white;
+}
+
+.order-items img {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-success {
+    background: #4caf50;
+    border-color: #4caf50;
+    color: white !important;
+}
+
+.btn-success:hover {
+    background: #45a049;
+    border-color: #45a049;
+}
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background: rgba(144, 26, 26, 0.3);
+    border-bottom: 1px solid rgb(253, 250, 250);
+}
+
+.card-header>h5 {
+    color: rgb(255, 255, 255);
+}
+
+.form-control,
+.form-select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #901a1a;
+    color: white;
+    box-shadow: 0 0 0 0.25rem rgba(144, 26, 26, 0.25);
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-primary {
+    background: #901a1a;
+    border-color: #6e1313;
+}
+
+.btn-primary:hover {
+    background: #e04f54;
+    border-color: #6e1313;
+}
+
+.beat-item-info>h6 {
+    color: white;
+}
+
+.alert-success {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: #4caf50;
+    color: #4caf50;
+}
+
+.alert-danger {
+    background: rgba(255, 107, 107, 0.2);
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+.nav-tabs .nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    border: none;
+}
+
+.nav-tabs .nav-link.active {
+    background: rgba(144, 26, 26, 0.3);
+    color: white;
+    border: none;
+    border-bottom: 2px solid #901a1a;
+}
+
+.file-preview {
+    max-width: 100%;
+    max-height: 200px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-text {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 0.25rem;
+}
+
+.form-text i {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-outline-primary {
+    color: #901a1a;
+    border-color: #901a1a;
+}
+
+.btn-outline-primary:hover {
+    background: #901a1a;
+    color: white;
+}
+
+.beat-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.beat-item img,
+.beat-item video {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.beat-item-info {
+    flex: 1;
+}
+
+.d-flex.gap-2 {
+    display: flex;
+    gap: 8px;
+}
+/* Order Cards */
+.order-card {
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+.order-items img {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-success {
+    background: #4caf50;
+    border-color: #4caf50;
+}
+
+.btn-success:hover {
+    background: #45a049;
+    border-color: #45a049;
+}

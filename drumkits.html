@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DrumKits - @ariawave</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="source/css/mycss.css">
+    <link rel="stylesheet" href="source/css/drumkits.css">
+</head>
+
+<body>
+    <!-- Навигация -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-black" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#" onclick="showAdminModal(); return false;"><img
+                        src="source/images/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="beats.html">Beats</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="drumkits.html">DrumKits</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="samplekits.html">SampleKit</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" aria-disabled="true">Mixer Presets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" aria-disabled="true">Flstudio Projects</a>
+                        </li>
+                    </ul>
+                    <div class="ms-auto">
+                        <button class="btn btn-outline-light position-relative" data-bs-toggle="modal"
+                            data-bs-target="#cartModal">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="cartCount">
+                                0
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Основной контент -->
+    <section class="hero-section" data-bs-theme="dark">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="source/video/video.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+        <div class="hero-overlay"></div>
+
+        <div class="container hero-content">
+            <div class="text-center align-items-center mb-5">
+                <h1 class="display-3 fw-bold">DrumKits Store</h1>
+                <p class="fst-italic">@ariawave</p>
+            </div>
+        </div>
+
+        <div class="container hero-content drumkits-container">
+            <!-- Filters -->
+            <div class="filters-section mb-5">
+                <div class="row g-2 align-items-center justify-content-center">
+                    <div class="col-md-3 col-sm-6">
+                        <input type="text" class="form-control" id="searchKit" placeholder="Search drumkits...">
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <select class="form-select" id="sortBy">
+                            <option value="newest">Newest</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <span class="text-white-50" id="kitsCount">0 kits found</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DrumKits Grid -->
+            <div class="drumkits-catalog">
+                <div class="row g-4" id="drumkitsGrid">
+                    <!-- DrumKits will be loaded here via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="DrumKits pagination" class="mt-4">
+                <ul class="pagination justify-content-center" id="pagination">
+                    <!-- Pagination will be generated by JS -->
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title"><i class="fas fa-shopping-cart me-2"></i>Your Cart</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cartItems">
+                        <p class="text-center text-white-50">Your cart is empty</p>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <div class="w-100">
+                        <!-- Promo Code Section -->
+                        <div class="promo-section mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="promoInput" placeholder="Enter promo code">
+                                <button class="btn btn-outline-light" type="button" id="applyPromoBtn">
+                                    Apply
+                                </button>
+                            </div>
+                            <div id="promoMessage" class="promo-message mt-2"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="cartSubtotal">$0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2 text-success" id="discountRow"
+                            style="display: none;">
+                            <span>Discount:</span>
+                            <span id="cartDiscount">-$0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="fs-5">Total:</span>
+                            <span class="fw-bold fs-5" id="cartTotal">$0</span>
+                        </div>
+                        <button class="btn btn-danger w-100" id="checkoutBtn">
+                            <i class="fas fa-credit-card me-2"></i>Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast контейнер -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999;"></div>
+
+    <!-- Admin Modal -->
+    <div class="modal fade" id="adminModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-white">
+                        <i class="fas fa-shield-alt me-2 text-danger"></i>Admin Access
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-white">
+                    <p class="mb-0">You are admin?</p>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" onclick="goToAdmin()">
+                        <i class="fas fa-check me-2"></i>Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white border-top border-secondary border-opacity-25 py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-4 text-center text-md-start mb-3 mb-md-0">
+                    <span class="fw-bold fs-5">@ariawave</span>
+                </div>
+                <div class="col-12 col-md-4 text-center">
+                    <div class="d-flex justify-content-center gap-4">
+                        <a href="beats.html" class="text-white-50 text-decoration-none small">Exclusive Beats</a>
+                        <a href="drumkits.html" class="text-white-50 text-decoration-none small">Drum Kits</a>
+                        <a href="samplekit.html" class="text-white-50 text-decoration-none small">Sample Packs</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3">
+                        <a href="https://www.youtube.com/@aria_wave" class="text-white-50" target="_blank"><i
+                                class="fab fa-youtube"></i></a>
+                        <a href="https://t.me/imdecember12" class="text-white-50" target="_blank"><i
+                                class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3 pt-3 border-top border-white border-opacity-10">
+                <p class="text-white-50 small mb-0">&copy; 2026 @ariawave. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="source/js/myjs.js"></script>
+    <script src="source/js/cart.js"></script>
+    <script src="source/js/drumkits.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
