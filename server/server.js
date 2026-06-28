@@ -1144,18 +1144,54 @@ app.get('/api/crypto/status/:invoiceUuid', async (req, res) => {
 // ============================================
 // СТАТИЧЕСКИЕ ФАЙЛЫ И РОУТЫ
 // ============================================
-app.use('/source', express.static(path.join(__dirname, '..', 'source')));
-app.use('/css', express.static(path.join(__dirname, '..', 'source', 'css')));
-app.use('/js', express.static(path.join(__dirname, '..', 'source', 'js')));
-app.use('/images', express.static(path.join(__dirname, '..', 'source', 'images')));
-app.use('/audio', express.static(path.join(__dirname, '..', 'source', 'audio')));
-app.use('/videos', express.static(path.join(__dirname, '..', 'source', 'videos')));
-app.use('/archives', express.static(path.join(__dirname, '..', 'source', 'archives')));
+
+const path = require('path');
 
 // Маршрут для корня сайта
 app.get('/', (req, res) => {
-    res.redirect('/index.html');
+    res.sendFile(path.join(__dirname, '..', 'beats.html'));
 });
+
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'beats.html'));
+});
+
+// Статические файлы
+app.use('/source', express.static(path.join(__dirname, '..', 'source'), {
+    maxAge: '1d',
+    fallthrough: true
+}));
+
+app.use('/css', express.static(path.join(__dirname, '..', 'source', 'css'), {
+    maxAge: '1d',
+    fallthrough: true
+}));
+
+app.use('/js', express.static(path.join(__dirname, '..', 'source', 'js'), {
+    maxAge: '1d',
+    fallthrough: true
+}));
+
+app.use('/images', express.static(path.join(__dirname, '..', 'source', 'images'), {
+    maxAge: '1d',
+    fallthrough: true
+}));
+
+app.use('/audio', express.static(path.join(__dirname, '..', 'source', 'audio'), {
+    maxAge: '1d',
+    fallthrough: true
+}));
+
+app.use('/videos', express.static(path.join(__dirname, '..', 'source', 'videos'), {
+    maxAge: '1d',
+    fallthrough: true
+}));
+
+app.use('/archives', express.static(path.join(__dirname, '..', 'source', 'archives'), {
+    maxAge: '1d',
+    fallthrough: true
+}));
+
 // Универсальный роут для всех .html файлов
 app.get('/:page.html', (req, res) => {
     const page = req.params.page;
@@ -1164,8 +1200,30 @@ app.get('/:page.html', (req, res) => {
     if (fs.existsSync(filePath)) {
         res.sendFile(filePath);
     } else {
-        res.status(404).send('Page not found');
+        res.status(404).send(`
+            <h1>404 - Page Not Found</h1>
+            <p>File: ${page}.html</p>
+            <p><a href="/">Go to Home</a></p>
+        `);
     }
+});
+
+// Health check
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        message: 'Server is running',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).send(`
+        <h1>404 - Page Not Found</h1>
+        <p>Path: ${req.path}</p>
+        <p><a href="/">Go to Home</a></p>
+    `);
 });
 
 // ============================================

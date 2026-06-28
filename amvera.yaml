@@ -21,4 +21,6 @@ env:
   - name: ADMIN_USERNAME
     value: user
   - name: SESSION_SECRET
-    value: random-secret-key-min-32-chars
+    value: ariawave-secret-key-min-32-characters-long
+  - name: PORT
+    value: "3000"
