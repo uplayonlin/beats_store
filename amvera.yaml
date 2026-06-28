@@ -1,0 +1,24 @@
+meta:
+  environment: nodejs
+  toolchain:
+    name: nodejs
+    version: '18'
+
+build:
+  commands:
+    - npm install
+    - cd server && npm install
+
+run:
+  commands:
+    - node server/server.js
+
+port: 3000
+
+env:
+  - name: NODE_ENV
+    value: production
+  - name: ADMIN_USERNAME
+    value: user
+  - name: SESSION_SECRET
+    value: random-secret-key-min-32-chars
