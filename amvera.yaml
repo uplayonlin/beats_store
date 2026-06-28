@@ -15,9 +15,5 @@ port: 3000
 env:
   - name: NODE_ENV
     value: production
-  - name: ADMIN_USERNAME
-    value: user
-  - name: SESSION_SECRET
-    value: ariawave-secret-key-min-32-characters-long
   - name: PORT
     value: "3000"
