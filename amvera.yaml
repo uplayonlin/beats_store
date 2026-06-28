@@ -1,13 +1,10 @@
 meta:
-  environment: nodejs
+  environment: docker
   toolchain:
-    name: nodejs
-    version: '18'
+    name: docker
 
 build:
-  commands:
-    - npm install
-    - cd server && npm install
+  dockerfile: Dockerfile
 
 run:
   commands:
