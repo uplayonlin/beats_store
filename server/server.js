@@ -1183,7 +1183,10 @@ app.use('/images', express.static(path.join(__dirname, '..', 'source', 'images')
 app.use('/audio', express.static(path.join(__dirname, '..', 'source', 'audio')));
 app.use('/videos', express.static(path.join(__dirname, '..', 'source', 'videos')));
 app.use('/archives', express.static(path.join(__dirname, '..', 'source', 'archives')));
-
+// Маршрут для корня сайта
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'beats.html'));
+});
 // Универсальный роут для всех .html файлов
 app.get('/:page.html', (req, res) => {
     const page = req.params.page;
@@ -1214,13 +1217,24 @@ app.use((req, res) => {
 });
 
 // ============================================
-// ЗАПУСК СЕРВЕРА
+// ЗАПУСК СЕРВЕРА (локально)
 // ============================================
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+// app.listen(PORT, () => {
+//     console.log(`🚀 Server running on http://localhost:${PORT}`);
+//     console.log(`📁 Uploads: ${uploadsDir}`);
+//     console.log(`🎵 Admin panel: http://localhost:${PORT}/admin.html`);
+//     console.log(`🏠 Store: http://localhost:${PORT}/beats.html`);
+//     console.log(`🥁 DrumKitStore: http://localhost:${PORT}/drumkits.html`);
+//     console.log(`🎹 samplekitsStore: http://localhost:${PORT}/samplekits.html`);
+// });
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
     console.log(`📁 Uploads: ${uploadsDir}`);
-    console.log(`🎵 Admin panel: http://localhost:${PORT}/admin.html`);
-    console.log(`🏠 Store: http://localhost:${PORT}/beats.html`);
-    console.log(`🥁 DrumKitStore: http://localhost:${PORT}/drumkits.html`);
-    console.log(`🎹 samplekitsStore: http://localhost:${PORT}/samplekits.html`);
+    console.log(`🎵 Admin panel: http://0.0.0.0:${PORT}/admin.html`);
+    console.log(`🏠 Store: http://0.0.0.0:${PORT}/beats.html`);
+    console.log(`🥁 DrumKitStore: http://0.0.0.0:${PORT}/drumkits.html`);
+    console.log(`🎹 samplekitsStore: http://0.0.0.0:${PORT}/samplekits.html`);
 });
