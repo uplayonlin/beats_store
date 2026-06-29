@@ -16,8 +16,9 @@ const PORT = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+// Логирование всех запросов
 app.use((req, res, next) => {
-    console.log(`📥 ${req.method} ${req.url} from ${req.ip}`);
+    console.log(`📥 ${new Date().toISOString()} - ${req.method} ${req.url}`);
     next();
 });
 
@@ -1233,12 +1234,8 @@ app.use((req, res) => {
 // });
 
 //Запуск на 0.0.0.0
-app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
-    const port = process.env.PORT || 3000;
-    console.log(`🚀 Server running on http://0.0.0.0:${port}`);
-    console.log(`📁 Uploads: ${uploadsDir}`);
-    console.log(`🎵 Admin panel: http://0.0.0.0:${port}/admin.html`);
-    console.log(`🏠 Store: http://0.0.0.0:${port}/beats.html`);
-    console.log(`🥁 DrumKitStore: http://0.0.0.0:${port}/drumkits.html`);
-    console.log(`🎹 samplekitsStore: http://0.0.0.0:${port}/samplekits.html`);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
+    console.log(`🔍 PORT from env: ${process.env.PORT}`);
 });
