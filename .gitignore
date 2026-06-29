@@ -25,7 +25,7 @@ source/images/drumkits/
 source/images/samplekits/
 source/videos/drumkits/
 source/videos/samplekits/
-source/video/
+!source/video/
 source/zip/
 
 # Загружаем только логотип и основные картинки
