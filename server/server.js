@@ -12,7 +12,7 @@ const fs = require('fs');
 const db = require('./database');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -1234,8 +1234,11 @@ app.use((req, res) => {
 // });
 
 //Запуск на 0.0.0.0
-const PORT = process.env.PORT || 8080;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
-    console.log(`🔍 PORT from env: ${process.env.PORT}`);
+    console.log(`📁 Uploads: ${uploadsDir}`);
+    console.log(`🎵 Admin panel: http://0.0.0.0:${PORT}/admin.html`);
+    console.log(`🏠 Store: http://0.0.0.0:${PORT}/beats.html`);
+    console.log(`🥁 DrumKitStore: http://0.0.0.0:${PORT}/drumkits.html`);
+    console.log(`🎹 samplekitsStore: http://0.0.0.0:${PORT}/samplekits.html`);
 });
