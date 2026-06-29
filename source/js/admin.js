@@ -1,5 +1,5 @@
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = '/api';
 
 // Проверка авторизации при загрузке
 document.addEventListener('DOMContentLoaded', async () => {
