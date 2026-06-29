@@ -6,4 +6,4 @@ meta:
 build:
   dockerfile: Dockerfile
 
-port: 8080
+port: 80
