@@ -16,6 +16,10 @@ const PORT = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use((req, res, next) => {
+    console.log(`📥 ${req.method} ${req.url} from ${req.ip}`);
+    next();
+});
 
 // ============================================
 // СЕССИИ И АВТОРИЗАЦИЯ (ДО роутов!)
@@ -1228,6 +1232,7 @@ app.use((req, res) => {
 //     console.log(`🎹 samplekitsStore: http://localhost:${PORT}/samplekits.html`);
 // });
 
+//Запуск на 0.0.0.0
 app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
     const port = process.env.PORT || 3000;
     console.log(`🚀 Server running on http://0.0.0.0:${port}`);
