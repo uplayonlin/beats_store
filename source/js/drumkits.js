@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ============================================
 async function loadDrumkitsFromServer() {
     try {
-        const response = await fetch('http://localhost:3000/api/drumkits');
+        const response = await fetch('/api/drumkits');
         const data = await response.json();
 
         if (data && data.length > 0) {
@@ -293,7 +293,7 @@ function buyFullKit(id) {
 function downloadFreeKit(id) {
     const kit = drumkits.find(k => k.id === id);
     if (kit.archive) {
-        window.location.href = `http://localhost:3000/api/drumkits/${id}/download`;
+        window.location.href = `/api/drumkits/${id}/download`;
     } else {
         alert('Free version not available');
     }

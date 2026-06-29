@@ -162,7 +162,7 @@ async function applyPromoCode() {
     }
 
     try {
-        const response = await fetch('http://localhost:3000/api/promocodes/apply', {
+        const response = await fetch('/api/promocodes/apply', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code })
@@ -229,7 +229,7 @@ function setupCartEventListeners() {
             const total = subtotal - discount;
 
             try {
-                const response = await fetch('http://localhost:3000/api/orders', {
+                const response = await fetch('/api/orders', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

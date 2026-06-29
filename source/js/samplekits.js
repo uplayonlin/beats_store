@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ============================================
 async function loadSamplekitsFromServer() {
     try {
-        const response = await fetch('http://localhost:3000/api/samplekits');
+        const response = await fetch('/api/samplekits');
         const data = await response.json();
 
         if (data && data.length > 0) {
@@ -292,7 +292,7 @@ function buyFullKit(id) {
 function downloadFreeKit(id) {
     const kit = samplekits.find(k => k.id === id);
     if (kit.archive) {
-        window.location.href = `http://localhost:3000/api/samplekits/${id}/download`;
+        window.location.href = `/api/samplekits/${id}/download`;
     } else {
         alert('Free version not available');
     }
