@@ -6,6 +6,4 @@ meta:
 build:
   dockerfile: Dockerfile
 
-run:
-  command: ["node", "server/server.js"]
-  port: 8080
+port: 8080
