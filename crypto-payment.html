@@ -514,10 +514,6 @@
             console.log('🔔 createPayment() called');
             console.log('📦 currentOrder:', currentOrder);
             console.log('📦 selectedCurrency:', selectedCurrency);
-            console.log('📥 Full response from TryBit:', JSON.stringify(data, null, 2));
-            console.log('📥 paymentData.address:', data.address);
-            console.log('📥 paymentData.qrCode:', data.qrCode);
-            console.log('📥 paymentData.paymentLink:', data.paymentLink);
 
             if (!currentOrder || !currentOrder.orderId || !currentOrder.total || !currentOrder.email) {
                 alert('Error: Order data is incomplete. Please try again.');
@@ -544,13 +540,23 @@
                 });
 
                 console.log('📥 Response status:', response.status);
+
+                // Проверяем что ответ JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    console.error('📥 Response is not JSON:', text);
+                    throw new Error('Server returned non-JSON response');
+                }
+
                 const data = await response.json();
                 console.log('📥 Response data:', data);
 
                 loading.style.display = 'none';
 
-                if (response.ok) {
+                if (response.ok && data.success) {
                     paymentData = data;
+                    console.log('✅ Payment data saved:', paymentData);
                     showPaymentView();
                     startPolling();
                     startCountdown();
