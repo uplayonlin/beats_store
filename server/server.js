@@ -980,11 +980,6 @@ const trybit = new TryBitPayment(
     process.env.TRYBIT_SHOP_ID,
     process.env.TRYBIT_SECRET_KEY
 );
-const trybit = new TryBitPayment(
-    process.env.TRYBIT_API_KEY,
-    process.env.TRYBIT_SHOP_ID,
-    process.env.TRYBIT_SECRET_KEY
-);
 
 // Создать крипто-платёж
 app.post('/api/crypto/create', async (req, res) => {
