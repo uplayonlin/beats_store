@@ -513,6 +513,10 @@
             console.log('🔔 createPayment() called');
             console.log('📦 currentOrder:', currentOrder);
             console.log('📦 selectedCurrency:', selectedCurrency);
+            console.log('📥 Full response from TryBit:', JSON.stringify(data, null, 2));
+            console.log('📥 paymentData.address:', data.address);
+            console.log('📥 paymentData.qrCode:', data.qrCode);
+            console.log('📥 paymentData.paymentLink:', data.paymentLink);
 
             if (!currentOrder || !currentOrder.orderId || !currentOrder.total || !currentOrder.email) {
                 alert('Error: Order data is incomplete. Please try again.');
