@@ -967,7 +967,19 @@ app.put('/api/orders/:id/cancel', requireAuth, (req, res) => {
 // CRYPTO PAYMENTS (TryBit)
 // ============================================
 const TryBitPayment = require('./trybit');
+// 🔍 Логирование для отладки (ключи маскируются)
+console.log('🔑 TryBit Configuration:');
+console.log('  - API Key:', process.env.TRYBIT_API_KEY ? 
+    process.env.TRYBIT_API_KEY.substring(0, 10) + '...' : '❌ NOT SET');
+console.log('  - Shop ID:', process.env.TRYBIT_SHOP_ID || '❌ NOT SET');
+console.log('  - Secret Key:', process.env.TRYBIT_SECRET_KEY ? 
+    process.env.TRYBIT_SECRET_KEY.substring(0, 10) + '...' : '❌ NOT SET');
 
+const trybit = new TryBitPayment(
+    process.env.TRYBIT_API_KEY,
+    process.env.TRYBIT_SHOP_ID,
+    process.env.TRYBIT_SECRET_KEY
+);
 const trybit = new TryBitPayment(
     process.env.TRYBIT_API_KEY,
     process.env.TRYBIT_SHOP_ID,
