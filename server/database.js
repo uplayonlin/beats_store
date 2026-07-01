@@ -60,12 +60,18 @@ db.serialize(() => {
 
     // Таблица заказов
     db.run(`CREATE TABLE IF NOT EXISTS orders (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        items TEXT NOT NULL,
-        total REAL NOT NULL,
-        promo_code TEXT,
-        email TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    items TEXT,
+    total REAL,
+    promo_code TEXT,
+    email TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at TEXT,
+    paid_at TEXT,
+    crypto_amount REAL,
+    crypto_currency TEXT,
+    payment_method TEXT,
+    payment_id TEXT
     )`);
     // Таблица крипто-платежей
     db.run(`CREATE TABLE IF NOT EXISTS crypto_payments (

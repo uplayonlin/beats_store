@@ -314,7 +314,8 @@
 
             <div class="info-box">
                 <i class="fas fa-info-circle"></i>
-                <strong>Recommended:</strong> USDT TRC20 has the lowest fees (~$1) and fast confirmation.
+                <strong>Test Mode:</strong> Click "Open Payment Page" to complete payment on TryBit.
+                After selecting cryptocurrency, you'll see the wallet address and QR code.
             </div>
 
             <button class="btn btn-danger w-100 py-3" onclick="createPayment()">
@@ -568,17 +569,43 @@
             document.getElementById('cryptoSelectView').style.display = 'none';
             document.getElementById('paymentView').style.display = 'block';
 
-            if (paymentData.qrCode) {
-                document.getElementById('qrCode').src = paymentData.qrCode;
-            }
-            document.getElementById('cryptoAmount').textContent =
-                parseFloat(paymentData.amount).toFixed(6);
-            document.getElementById('cryptoCurrency').textContent =
-                paymentData.currency || 'USDT';
-            document.getElementById('walletAddress').textContent = paymentData.address || 'N/A';
+            // В тестовом режиме TryBit не возвращает адрес сразу
+            // Нужно перейти по paymentLink для получения адреса
+            const address = paymentData.address;
+            const qrCode = paymentData.qrCode;
+            const paymentLink = paymentData.paymentLink;
 
-            if (paymentData.paymentLink) {
-                document.getElementById('paymentLinkBtn').href = paymentData.paymentLink;
+            console.log('📥 Payment data:', { address, qrCode, paymentLink });
+
+            // Если адрес есть - показываем QR-код
+            if (address && address !== '') {
+                if (qrCode) {
+                    document.getElementById('qrCode').src = qrCode;
+                } else {
+                    // Генерируем QR-код сами
+                    document.getElementById('qrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${address}`;
+                }
+                document.getElementById('walletAddress').textContent = address;
+                document.getElementById('cryptoAmount').textContent =
+                    parseFloat(paymentData.amount).toFixed(6);
+                document.getElementById('cryptoCurrency').textContent =
+                    paymentData.currency || 'USDT';
+            } else {
+                // В тестовом режиме - перенаправляем на страницу TryBit
+                document.getElementById('walletAddress').textContent = 'Redirecting to payment page...';
+                document.getElementById('cryptoAmount').textContent = paymentData.amount;
+                document.getElementById('cryptoCurrency').textContent = paymentData.currency;
+                document.getElementById('qrCode').style.display = 'none';
+
+                // Автоматически открываем страницу оплаты через 2 секунды
+                setTimeout(() => {
+                    window.open(paymentLink, '_blank');
+                }, 2000);
+            }
+
+            if (paymentLink) {
+                document.getElementById('paymentLinkBtn').href = paymentLink;
+                document.getElementById('paymentLinkBtn').style.display = 'block';
             }
         }
 
