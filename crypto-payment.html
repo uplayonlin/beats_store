@@ -385,8 +385,9 @@
                 <p class="text-white-50 mb-4">
                     Thank you! Your order <strong id="successOrderId">#0</strong> has been paid.<br>
                     A receipt has been sent to <strong id="successEmail"></strong>
+                    
                 </p>
-
+                <p style="font-style: italic;"> if 404 just wait a few second</p>
                 <h5 class="mb-3"><i class="fas fa-download me-2"></i>Download your files:</h5>
                 <div id="downloadLinks"></div>
 
@@ -398,10 +399,6 @@
             </div>
         </div>
     </div>
-    <footer>
-        <a href="beats.html">Back to home</a>
-    </footer>
-
     <script>
         const API_URL = '/api';
         let currentOrder = null;
