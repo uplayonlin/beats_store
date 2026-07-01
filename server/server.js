@@ -970,6 +970,11 @@ app.put('/api/orders/:id/cancel', requireAuth, (req, res) => {
 const NOWPAYMENTS_API_KEY = process.env.NOWPAYMENTS_API_KEY;
 const NOWPAYMENTS_BASE_URL = 'https://api.nowpayments.io/v1';
 
+// 🔍 Логирование при старте
+console.log('💰 NOWPayments Configuration:');
+console.log('  - API Key:', NOWPAYMENTS_API_KEY ? 
+    NOWPAYMENTS_API_KEY.substring(0, 10) + '...' : '❌ NOT SET');
+console.log('  - Base URL:', NOWPAYMENTS_BASE_URL);
 // Функция для создания платежа в NOWPayments
 async function createNowPaymentsPayment(amount, orderId, email, currency = 'USDTTRC20') {
     try {
