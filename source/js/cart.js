@@ -73,36 +73,36 @@ function updateCartUI() {
 
     let subtotal = 0;
     cartItems.innerHTML = '';
-        cart.forEach((item, index) => {
-            subtotal += item.price;
-            const itemEl = document.createElement('div');
-            itemEl.className = 'cart-item';
+    cart.forEach((item, index) => {
+        subtotal += item.price;
+        const itemEl = document.createElement('div');
+        itemEl.className = 'cart-item';
 
-            const typeIcon = item.type === 'beat' ? 'fa-music' :
-                item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
+        const typeIcon = item.type === 'beat' ? 'fa-music' :
+            item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
 
-            // Определяем тип контента по расширению файла или явному свойству
-            const isVideo = item.coverType === 'video' ||
-                (item.cover && (item.cover.includes('.mp4') || item.cover.includes('.webm') || item.cover.includes('video')));
+        // Определяем тип контента по расширению файла или явному свойству
+        const isVideo = item.coverType === 'video' ||
+            (item.cover && (item.cover.includes('.mp4') || item.cover.includes('.webm') || item.cover.includes('video')));
 
-            let coverHTML = '';
-            if (isVideo) {
-                // Для видео пробуем загрузить, если ошибка - показываем логотип с пометкой "Video"
-                coverHTML = `
+        let coverHTML = '';
+        if (isVideo) {
+            // Для видео пробуем загрузить, если ошибка - показываем логотип с пометкой "Video"
+            coverHTML = `
                 <video src="${item.cover}" autoplay muted loop playsinline
                     onerror="this.outerHTML='<div style=\\'width:60px;height:60px;background:rgba(144,26,26,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;\\'><i class=\\'fas fa-video text-danger\\'></i></div>'"
                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0;">
                 </video>
             `;
-            } else {
-                coverHTML = `
+        } else {
+            coverHTML = `
                 <img src="${item.cover}" alt="${item.title}" 
                     onerror="this.src='source/images/logo.png'"
                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0;">
             `;
-            }
+        }
 
-            itemEl.innerHTML = `
+        itemEl.innerHTML = `
             ${coverHTML}
             <div class="cart-item-info">
                 <div class="cart-item-title">
@@ -243,21 +243,26 @@ function setupCartEventListeners() {
                 const data = await response.json();
 
                 if (response.ok) {
-                    sessionStorage.setItem('currentOrder', JSON.stringify({
+                    // Сохраняем данные заказа
+                    const orderData = {
                         orderId: data.orderId,
-                        paymentId: data.paymentId,
                         items: cart,
                         subtotal: subtotal,
                         discount: discount,
                         total: total,
                         email: email
-                    }));
+                    };
+
+                    console.log('💾 Saving order to sessionStorage:', orderData);
+                    sessionStorage.setItem('currentOrder', JSON.stringify(orderData));
 
                     const cartModal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
                     if (cartModal) cartModal.hide();
 
+                    console.log('✅ Redirecting to crypto-payment.html');
                     window.location.href = 'crypto-payment.html';
                 } else {
+                    console.error('❌ Error creating order:', data.error);
                     alert('❌ Error creating order: ' + data.error);
                 }
             } catch (error) {

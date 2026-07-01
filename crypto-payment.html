@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +14,12 @@
             min-height: 100vh;
             padding: 40px 20px;
         }
-        .payment-container { max-width: 600px; margin: 0 auto; }
+
+        .payment-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
         .payment-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -21,12 +27,14 @@
             padding: 30px;
             backdrop-filter: blur(20px);
         }
+
         .crypto-selector {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin-bottom: 20px;
         }
+
         .crypto-option {
             background: rgba(255, 255, 255, 0.08);
             border: 2px solid rgba(255, 255, 255, 0.1);
@@ -36,21 +44,46 @@
             cursor: pointer;
             transition: all 0.3s;
         }
+
         .crypto-option:hover {
             border-color: #901a1a;
             transform: translateY(-2px);
         }
+
         .crypto-option.selected {
             border-color: #4caf50;
             background: rgba(76, 175, 80, 0.1);
         }
-        .crypto-option i { font-size: 2rem; margin-bottom: 8px; }
-        .crypto-option.btc i { color: #f7931a; }
-        .crypto-option.eth i { color: #627eea; }
-        .crypto-option.usdt i { color: #26a17b; }
-        .crypto-option.usdc i { color: #2775ca; }
-        .crypto-option.ltc i { color: #345d9d; }
-        .crypto-option.trx i { color: #ff060a; }
+
+        .crypto-option i {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .crypto-option.btc i {
+            color: #f7931a;
+        }
+
+        .crypto-option.eth i {
+            color: #627eea;
+        }
+
+        .crypto-option.usdt i {
+            color: #26a17b;
+        }
+
+        .crypto-option.usdc i {
+            color: #2775ca;
+        }
+
+        .crypto-option.ltc i {
+            color: #345d9d;
+        }
+
+        .crypto-option.trx i {
+            color: #ff060a;
+        }
+
         .qr-container {
             background: white;
             padding: 20px;
@@ -58,7 +91,12 @@
             display: inline-block;
             margin: 20px 0;
         }
-        .qr-container img { width: 250px; height: 250px; }
+
+        .qr-container img {
+            width: 250px;
+            height: 250px;
+        }
+
         .wallet-address {
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -69,6 +107,7 @@
             word-break: break-all;
             margin: 10px 0;
         }
+
         .copy-btn {
             background: #901a1a;
             border: none;
@@ -79,7 +118,11 @@
             width: 100%;
             transition: all 0.3s;
         }
-        .copy-btn:hover { background: #e04f54; }
+
+        .copy-btn:hover {
+            background: #e04f54;
+        }
+
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -88,9 +131,22 @@
             border-radius: 20px;
             font-weight: 600;
         }
-        .status-waiting { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
-        .status-confirming { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
-        .status-paid { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+
+        .status-waiting {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-confirming {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+        }
+
+        .status-paid {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
         .timer {
             font-size: 1.2rem;
             font-weight: 700;
@@ -98,18 +154,33 @@
             text-align: center;
             margin: 15px 0;
         }
-        .success-view { text-align: center; padding: 40px 20px; }
+
+        .success-view {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
         .success-icon {
             font-size: 5rem;
             color: #4caf50;
             margin-bottom: 20px;
             animation: pop 0.5s ease;
         }
+
         @keyframes pop {
-            0% { transform: scale(0); }
-            70% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(0);
+            }
+
+            70% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
+
         .download-btn {
             background: #4caf50;
             border: none;
@@ -120,7 +191,12 @@
             text-decoration: none;
             display: inline-block;
         }
-        .download-btn:hover { background: #45a049; color: white; }
+
+        .download-btn:hover {
+            background: #45a049;
+            color: white;
+        }
+
         .info-box {
             background: rgba(144, 26, 26, 0.1);
             border: 1px solid rgba(144, 26, 26, 0.3);
@@ -129,7 +205,12 @@
             margin: 15px 0;
             font-size: 0.9rem;
         }
-        .info-box i { color: #e04f54; margin-right: 8px; }
+
+        .info-box i {
+            color: #e04f54;
+            margin-right: 8px;
+        }
+
         .pay-amount {
             font-size: 1.5rem;
             font-weight: 700;
@@ -137,22 +218,32 @@
             text-align: center;
             margin: 15px 0;
         }
+
         .order-summary {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
         }
+
         .loading-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(0, 0, 0, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
         }
-        .spinner-border { width: 3rem; height: 3rem; }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+
         .payment-link-btn {
             background: #2196f3;
             border: none;
@@ -165,12 +256,14 @@
             display: block;
             text-align: center;
         }
+
         .payment-link-btn:hover {
             background: #1976d2;
             color: white;
         }
     </style>
 </head>
+
 <body>
     <!-- Loading -->
     <div id="loadingOverlay" class="loading-overlay" style="display: none;">
@@ -186,12 +279,13 @@
             <h2 class="mb-4">
                 <i class="fas fa-coins me-2 text-warning"></i>Pay with Crypto
             </h2>
-            
+
             <div class="order-summary" id="orderSummary"></div>
 
             <h5 class="mb-3">Select Cryptocurrency:</h5>
             <div class="crypto-selector" id="cryptoSelector">
-                <div class="crypto-option usdt selected" data-currency="USDT_TRC20" onclick="selectCrypto('USDT_TRC20')">
+                <div class="crypto-option usdt selected" data-currency="USDT_TRC20"
+                    onclick="selectCrypto('USDT_TRC20')">
                     <i class="fas fa-dollar-sign"></i>
                     <div>USDT TRC20</div>
                     <small class="text-white-50">Low fee</small>
@@ -291,7 +385,7 @@
                     Thank you! Your order <strong id="successOrderId">#0</strong> has been paid.<br>
                     A receipt has been sent to <strong id="successEmail"></strong>
                 </p>
-                
+
                 <h5 class="mb-3"><i class="fas fa-download me-2"></i>Download your files:</h5>
                 <div id="downloadLinks"></div>
 
@@ -314,14 +408,35 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const orderData = sessionStorage.getItem('currentOrder');
+            console.log(' Raw order data from sessionStorage:', orderData);
+
             if (!orderData) {
                 alert('No order found. Redirecting to store...');
                 window.location.href = 'beats.html';
                 return;
             }
 
-            currentOrder = JSON.parse(orderData);
-            renderOrderSummary();
+            try {
+                currentOrder = JSON.parse(orderData);
+                console.log('✅ Parsed order:', currentOrder);
+                console.log('📋 Order ID:', currentOrder.orderId);
+                console.log('💰 Total:', currentOrder.total);
+                console.log('📧 Email:', currentOrder.email);
+
+                // Проверка обязательных полей
+                if (!currentOrder.orderId || !currentOrder.total || !currentOrder.email) {
+                    console.error('❌ Missing required fields!');
+                    alert('Error: Order data is incomplete. Please try again.');
+                    window.location.href = 'beats.html';
+                    return;
+                }
+
+                renderOrderSummary();
+            } catch (error) {
+                console.error('❌ Error parsing order data:', error);
+                alert('Error loading order data. Please try again.');
+                window.location.href = 'beats.html';
+            }
         });
 
         function renderOrderSummary() {
@@ -329,8 +444,8 @@
             let html = `<h6 class="mb-3">Order #${currentOrder.orderId}</h6>`;
 
             currentOrder.items.forEach(item => {
-                const icon = item.type === 'beat' ? 'fa-music' : 
-                            item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
+                const icon = item.type === 'beat' ? 'fa-music' :
+                    item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
                 html += `
                     <div class="d-flex justify-content-between mb-1 small">
                         <span><i class="fas ${icon} me-2 text-danger"></i>${item.title}</span>
@@ -366,22 +481,31 @@
         }
 
         async function createPayment() {
+            console.log(' Creating payment...');
+            console.log('Current order:', currentOrder);
+
             const loading = document.getElementById('loadingOverlay');
             loading.style.display = 'flex';
 
             try {
+                const requestBody = {
+                    orderId: currentOrder.orderId,
+                    amount: currentOrder.total,
+                    email: currentOrder.email,
+                    cryptocurrency: selectedCurrency
+                };
+
+                console.log('📤 Sending request:', requestBody);
+
                 const response = await fetch(`${API_URL}/crypto/create`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        orderId: currentOrder.orderId,
-                        amount: currentOrder.total,
-                        email: currentOrder.email,
-                        cryptocurrency: selectedCurrency
-                    })
+                    body: JSON.stringify(requestBody)
                 });
 
                 const data = await response.json();
+                console.log('📥 Response:', data);
+
                 loading.style.display = 'none';
 
                 if (response.ok) {
@@ -390,9 +514,11 @@
                     startPolling();
                     startCountdown();
                 } else {
+                    console.error('❌ Error creating payment:', data.error);
                     alert('Error creating payment: ' + data.error);
                 }
             } catch (error) {
+                console.error('❌ Payment creation error:', error);
                 loading.style.display = 'none';
                 alert('Failed to create payment: ' + error.message);
             }
@@ -403,9 +529,9 @@
             document.getElementById('paymentView').style.display = 'block';
 
             document.getElementById('qrCode').src = paymentData.qrCode;
-            document.getElementById('cryptoAmount').textContent = 
+            document.getElementById('cryptoAmount').textContent =
                 parseFloat(paymentData.amount).toFixed(6);
-            document.getElementById('cryptoCurrency').textContent = 
+            document.getElementById('cryptoCurrency').textContent =
                 paymentData.currency;
             document.getElementById('walletAddress').textContent = paymentData.address;
             document.getElementById('paymentLinkBtn').href = paymentData.paymentLink;
@@ -447,10 +573,10 @@
         function updateStatus(status) {
             const badge = document.getElementById('statusBadge');
             const text = document.getElementById('statusText');
-            
+
             badge.className = 'status-badge';
-            
-            switch(status) {
+
+            switch (status) {
                 case 'created':
                     badge.classList.add('status-waiting');
                     text.textContent = 'Waiting for payment';
@@ -478,8 +604,8 @@
                 const hours = Math.floor(timeLeft / 3600);
                 const minutes = Math.floor((timeLeft % 3600) / 60);
                 const seconds = timeLeft % 60;
-                
-                document.getElementById('timeRemaining').textContent = 
+
+                document.getElementById('timeRemaining').textContent =
                     `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
                 if (timeLeft <= 0) {
@@ -502,8 +628,8 @@
 
             currentOrder.items.forEach(item => {
                 const itemId = item.id || item.beatId;
-                const icon = item.type === 'beat' ? 'fa-music' : 
-                            item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
+                const icon = item.type === 'beat' ? 'fa-music' :
+                    item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
                 html += `
                     <a href="${API_URL}/orders/${currentOrder.orderId}/download/${item.type}/${itemId}" 
                        class="download-btn">
@@ -519,4 +645,5 @@
         }
     </script>
 </body>
+
 </html>
