@@ -496,13 +496,7 @@
 
         window.copyAddress = function () {
             if (!paymentData || !paymentData.address) {
-                // Вместо alert - перенаправляем на страницу TryBit
-                if (paymentData && paymentData.paymentLink) {
-                    alert('Address is available on the TryBit payment page. Opening it now...');
-                    window.open(paymentData.paymentLink, '_blank');
-                } else {
-                    alert('No address available yet. Please wait...');
-                }
+                alert('No address available');
                 return;
             }
 
@@ -511,6 +505,9 @@
                 const original = btn.innerHTML;
                 btn.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
                 setTimeout(() => btn.innerHTML = original, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy address');
             });
         };
 
@@ -580,39 +577,29 @@
             document.getElementById('cryptoSelectView').style.display = 'none';
             document.getElementById('paymentView').style.display = 'block';
 
-            // В тестовом режиме TryBit не возвращает адрес сразу
-            // Нужно перейти по paymentLink для получения адреса
             const address = paymentData.address;
             const qrCode = paymentData.qrCode;
             const paymentLink = paymentData.paymentLink;
 
             console.log('📥 Payment data:', { address, qrCode, paymentLink });
 
-            // Если адрес есть - показываем QR-код
-            if (address && address !== '') {
-                if (qrCode) {
-                    document.getElementById('qrCode').src = qrCode;
-                } else {
-                    // Генерируем QR-код сами
-                    document.getElementById('qrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${address}`;
-                }
-                document.getElementById('walletAddress').textContent = address;
-                document.getElementById('cryptoAmount').textContent =
-                    parseFloat(paymentData.amount).toFixed(6);
-                document.getElementById('cryptoCurrency').textContent =
-                    paymentData.currency || 'USDT';
+            // NOWPayments всегда возвращает адрес и QR-код
+            if (qrCode) {
+                document.getElementById('qrCode').src = qrCode;
+                document.getElementById('qrCode').style.display = 'block';
+            } else if (address) {
+                // Генерируем QR-код сами если не пришёл
+                document.getElementById('qrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${address}`;
+                document.getElementById('qrCode').style.display = 'block';
             } else {
-                // В тестовом режиме - перенаправляем на страницу TryBit
-                document.getElementById('walletAddress').textContent = 'Redirecting to payment page...';
-                document.getElementById('cryptoAmount').textContent = paymentData.amount;
-                document.getElementById('cryptoCurrency').textContent = paymentData.currency;
                 document.getElementById('qrCode').style.display = 'none';
-
-                // Автоматически открываем страницу оплаты через 2 секунды
-                setTimeout(() => {
-                    window.open(paymentLink, '_blank');
-                }, 2000);
             }
+
+            document.getElementById('cryptoAmount').textContent =
+                parseFloat(paymentData.amount || 0).toFixed(6);
+            document.getElementById('cryptoCurrency').textContent =
+                paymentData.currency || 'USDT';
+            document.getElementById('walletAddress').textContent = address || 'N/A';
 
             if (paymentLink) {
                 document.getElementById('paymentLinkBtn').href = paymentLink;
