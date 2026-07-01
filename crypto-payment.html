@@ -408,7 +408,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const orderData = sessionStorage.getItem('currentOrder');
-            console.log(' Raw order data from sessionStorage:', orderData);
+            console.log('📥 Raw order data from sessionStorage:', orderData);
 
             if (!orderData) {
                 alert('No order found. Redirecting to store...');
@@ -423,10 +423,18 @@
                 console.log('💰 Total:', currentOrder.total);
                 console.log('📧 Email:', currentOrder.email);
 
-                // Проверка обязательных полей
-                if (!currentOrder.orderId || !currentOrder.total || !currentOrder.email) {
+                if (currentOrder.orderId === undefined || currentOrder.orderId === null ||
+                    currentOrder.email === undefined || currentOrder.email === null ||
+                    currentOrder.total === undefined || currentOrder.total === null) {
                     console.error('❌ Missing required fields!');
                     alert('Error: Order data is incomplete. Please try again.');
+                    window.location.href = 'beats.html';
+                    return;
+                }
+
+                if (currentOrder.total <= 0) {
+                    console.error('❌ Order total must be greater than 0!');
+                    alert('Error: Order total is $0. Please check your cart.');
                     window.location.href = 'beats.html';
                     return;
                 }
@@ -447,45 +455,69 @@
                 const icon = item.type === 'beat' ? 'fa-music' :
                     item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
                 html += `
-                    <div class="d-flex justify-content-between mb-1 small">
-                        <span><i class="fas ${icon} me-2 text-danger"></i>${item.title}</span>
-                        <span>$${item.price.toFixed(2)}</span>
-                    </div>
-                `;
+                <div class="d-flex justify-content-between mb-1 small">
+                    <span><i class="fas ${icon} me-2 text-danger"></i>${item.title}</span>
+                    <span>$${item.price.toFixed(2)}</span>
+                </div>
+            `;
             });
 
             if (currentOrder.discount > 0) {
                 html += `
-                    <div class="d-flex justify-content-between text-success small mt-2">
-                        <span>Discount:</span>
-                        <span>-$${currentOrder.discount.toFixed(2)}</span>
-                    </div>
-                `;
+                <div class="d-flex justify-content-between text-success small mt-2">
+                    <span>Discount:</span>
+                    <span>-$${currentOrder.discount.toFixed(2)}</span>
+                </div>
+            `;
             }
 
             html += `
-                <div class="d-flex justify-content-between pt-2 mt-2 border-top border-secondary">
-                    <strong>Total:</strong>
-                    <strong class="text-danger">$${currentOrder.total.toFixed(2)}</strong>
-                </div>
-            `;
+            <div class="d-flex justify-content-between pt-2 mt-2 border-top border-secondary">
+                <strong>Total:</strong>
+                <strong class="text-danger">$${currentOrder.total.toFixed(2)}</strong>
+            </div>
+        `;
 
             summary.innerHTML = html;
         }
 
-        function selectCrypto(currency) {
+        // Глобальная функция выбора криптовалюты
+        window.selectCrypto = function (currency) {
             selectedCurrency = currency;
             document.querySelectorAll('.crypto-option').forEach(opt => {
                 opt.classList.toggle('selected', opt.dataset.currency === currency);
             });
-        }
+            console.log('✅ Selected crypto:', currency);
+        };
 
-        async function createPayment() {
+        // Глобальная функция копирования адреса
+        window.copyAddress = function () {
+            if (!paymentData || !paymentData.address) {
+                alert('No address available');
+                return;
+            }
+
+            navigator.clipboard.writeText(paymentData.address).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
+                setTimeout(() => btn.innerHTML = original, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy address');
+            });
+        };
+
+        // Глобальная функция создания платежа
+        window.createPayment = async function () {
             console.log('🔔 createPayment() called');
             console.log('📦 currentOrder:', currentOrder);
-            console.log('📦 currentOrder.orderId:', currentOrder.orderId);
-            console.log('📦 currentOrder.total:', currentOrder.total);
-            console.log('📦 currentOrder.email:', currentOrder.email);
+            console.log('📦 selectedCurrency:', selectedCurrency);
+
+            if (!currentOrder || !currentOrder.orderId || !currentOrder.total || !currentOrder.email) {
+                alert('Error: Order data is incomplete. Please try again.');
+                return;
+            }
 
             const loading = document.getElementById('loadingOverlay');
             loading.style.display = 'flex';
@@ -498,7 +530,7 @@
                     cryptocurrency: selectedCurrency
                 };
 
-                console.log('📤 Sending request body:', JSON.stringify(requestBody, null, 2));
+                console.log('📤 Sending request:', JSON.stringify(requestBody, null, 2));
 
                 const response = await fetch(`${API_URL}/crypto/create`, {
                     method: 'POST',
@@ -510,128 +542,157 @@
                 const data = await response.json();
                 console.log('📥 Response data:', data);
 
-                function showPaymentView() {
-                    document.getElementById('cryptoSelectView').style.display = 'none';
-                    document.getElementById('paymentView').style.display = 'block';
+                loading.style.display = 'none';
 
-                    document.getElementById('qrCode').src = paymentData.qrCode;
-                    document.getElementById('cryptoAmount').textContent =
-                        parseFloat(paymentData.amount).toFixed(6);
-                    document.getElementById('cryptoCurrency').textContent =
-                        paymentData.currency;
-                    document.getElementById('walletAddress').textContent = paymentData.address;
-                    document.getElementById('paymentLinkBtn').href = paymentData.paymentLink;
+                if (response.ok) {
+                    paymentData = data;
+                    showPaymentView();
+                    startPolling();
+                    startCountdown();
+                } else {
+                    console.error('❌ Error creating payment:', data.error);
+                    alert('Error creating payment: ' + (data.error || 'Unknown error'));
                 }
+            } catch (error) {
+                console.error('❌ Payment creation error:', error);
+                loading.style.display = 'none';
+                alert('Failed to create payment: ' + error.message);
+            }
+        };
 
-                function copyAddress() {
-                    navigator.clipboard.writeText(paymentData.address).then(() => {
-                        const btn = document.querySelector('.copy-btn');
-                        const original = btn.innerHTML;
-                        btn.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
-                        setTimeout(() => btn.innerHTML = original, 2000);
-                    });
-                }
+        function showPaymentView() {
+            document.getElementById('cryptoSelectView').style.display = 'none';
+            document.getElementById('paymentView').style.display = 'block';
 
-                function startPolling() {
-                    pollingInterval = setInterval(async () => {
-                        try {
-                            const response = await fetch(`${API_URL}/crypto/status/${paymentData.invoiceUuid}`);
-                            const data = await response.json();
+            if (paymentData.qrCode) {
+                document.getElementById('qrCode').src = paymentData.qrCode;
+            }
+            document.getElementById('cryptoAmount').textContent =
+                parseFloat(paymentData.amount).toFixed(6);
+            document.getElementById('cryptoCurrency').textContent =
+                paymentData.currency || 'USDT';
+            document.getElementById('walletAddress').textContent = paymentData.address || 'N/A';
 
-                            updateStatus(data.status);
+            if (paymentData.paymentLink) {
+                document.getElementById('paymentLinkBtn').href = paymentData.paymentLink;
+            }
+        }
 
-                            if (data.status === 'paid' || data.invoiceStatus === 'success') {
-                                clearInterval(pollingInterval);
-                                clearInterval(countdownInterval);
-                                showSuccess();
-                            } else if (data.status === 'canceled') {
-                                clearInterval(pollingInterval);
-                                clearInterval(countdownInterval);
-                                alert('Payment canceled. Please try again.');
-                                location.reload();
-                            }
-                        } catch (error) {
-                            console.error('Polling error:', error);
-                        }
-                    }, 15000);
-                }
+        function startPolling() {
+            pollingInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`${API_URL}/crypto/status/${paymentData.invoiceUuid}`);
+                    const data = await response.json();
 
-                function updateStatus(status) {
-                    const badge = document.getElementById('statusBadge');
-                    const text = document.getElementById('statusText');
+                    updateStatus(data.status || data.invoiceStatus);
 
-                    badge.className = 'status-badge';
-
-                    switch (status) {
-                        case 'created':
-                            badge.classList.add('status-waiting');
-                            text.textContent = 'Waiting for payment';
-                            break;
-                        case 'partial':
-                            badge.classList.add('status-confirming');
-                            text.textContent = 'Partially paid';
-                            break;
-                        case 'paid':
-                        case 'success':
-                            badge.classList.add('status-paid');
-                            text.textContent = 'Paid!';
-                            break;
+                    if (data.status === 'paid' || data.invoiceStatus === 'success' || data.invoiceStatus === 'paid') {
+                        clearInterval(pollingInterval);
+                        clearInterval(countdownInterval);
+                        showSuccess();
+                    } else if (data.status === 'canceled' || data.invoiceStatus === 'canceled') {
+                        clearInterval(pollingInterval);
+                        clearInterval(countdownInterval);
+                        alert('Payment canceled. Please try again.');
+                        location.reload();
                     }
+                } catch (error) {
+                    console.error('Polling error:', error);
+                }
+            }, 15000);
+        }
+
+        function updateStatus(status) {
+            const badge = document.getElementById('statusBadge');
+            const text = document.getElementById('statusText');
+
+            if (!badge || !text) return;
+
+            badge.className = 'status-badge';
+
+            switch (status) {
+                case 'created':
+                case 'waiting':
+                    badge.classList.add('status-waiting');
+                    text.textContent = 'Waiting for payment';
+                    break;
+                case 'partial':
+                case 'confirming':
+                    badge.classList.add('status-confirming');
+                    text.textContent = 'Confirming...';
+                    break;
+                case 'paid':
+                case 'success':
+                    badge.classList.add('status-paid');
+                    text.textContent = 'Paid!';
+                    break;
+                default:
+                    text.textContent = status || 'Unknown';
+            }
+        }
+
+        function startCountdown() {
+            if (!paymentData || !paymentData.expiryDate) {
+                console.warn('No expiry date available');
+                return;
+            }
+
+            const expiryDate = new Date(paymentData.expiryDate);
+            const now = new Date();
+            let timeLeft = Math.floor((expiryDate - now) / 1000);
+
+            if (timeLeft < 0) timeLeft = 24 * 60 * 60;
+
+            countdownInterval = setInterval(() => {
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+
+                const timeElement = document.getElementById('timeRemaining');
+                if (timeElement) {
+                    timeElement.textContent =
+                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 }
 
-                function startCountdown() {
-                    const expiryDate = new Date(paymentData.expiryDate);
-                    const now = new Date();
-                    let timeLeft = Math.floor((expiryDate - now) / 1000);
-
-                    if (timeLeft < 0) timeLeft = 24 * 60 * 60;
-
-                    countdownInterval = setInterval(() => {
-                        const hours = Math.floor(timeLeft / 3600);
-                        const minutes = Math.floor((timeLeft % 3600) / 60);
-                        const seconds = timeLeft % 60;
-
-                        document.getElementById('timeRemaining').textContent =
-                            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-                        if (timeLeft <= 0) {
-                            clearInterval(countdownInterval);
-                            alert('Payment time expired. Please create a new payment.');
-                            location.reload();
-                        }
-                        timeLeft--;
-                    }, 1000);
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    alert('Payment time expired. Please create a new payment.');
+                    location.reload();
                 }
+                timeLeft--;
+            }, 1000);
+        }
 
-                function showSuccess() {
-                    document.getElementById('paymentView').style.display = 'none';
-                    document.getElementById('successView').style.display = 'block';
-                    document.getElementById('successOrderId').textContent = '#' + currentOrder.orderId;
-                    document.getElementById('successEmail').textContent = currentOrder.email;
+        function showSuccess() {
+            document.getElementById('paymentView').style.display = 'none';
+            document.getElementById('successView').style.display = 'block';
 
-                    const downloadLinks = document.getElementById('downloadLinks');
-                    let html = '';
+            const orderIdEl = document.getElementById('successOrderId');
+            const emailEl = document.getElementById('successEmail');
 
-                    currentOrder.items.forEach(item => {
-                        const itemId = item.id || item.beatId;
-                        const icon = item.type === 'beat' ? 'fa-music' :
-                            item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
-                        html += `
+            if (orderIdEl) orderIdEl.textContent = '#' + currentOrder.orderId;
+            if (emailEl) emailEl.textContent = currentOrder.email;
+
+            const downloadLinks = document.getElementById('downloadLinks');
+            if (downloadLinks && currentOrder.items) {
+                let html = '';
+                currentOrder.items.forEach(item => {
+                    const itemId = item.id || item.beatId;
+                    const icon = item.type === 'beat' ? 'fa-music' :
+                        item.type === 'drumkit' ? 'fa-drum' : 'fa-box';
+                    html += `
                     <a href="${API_URL}/orders/${currentOrder.orderId}/download/${item.type}/${itemId}" 
-                       class="download-btn">
+                       class="download-btn" target="_blank">
                         <i class="fas ${icon} me-2"></i>${item.title}
                     </a>
                 `;
-                    });
+                });
+                downloadLinks.innerHTML = html;
+            }
 
-                    downloadLinks.innerHTML = html;
-
-                    localStorage.removeItem('ariawave_cart');
-                    sessionStorage.removeItem('currentOrder');
-                }
-        window.selectCrypto = selectCrypto;
-        window.createPayment = createPayment;
-        window.copyAddress = copyAddress;
+            localStorage.removeItem('ariawave_cart');
+            sessionStorage.removeItem('currentOrder');
+        }
     </script>
 </body>
 
