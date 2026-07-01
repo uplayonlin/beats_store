@@ -398,6 +398,9 @@
             </div>
         </div>
     </div>
+    <footer>
+        <a href="beats.html">Back to home</a>
+    </footer>
 
     <script>
         const API_URL = '/api';
@@ -491,10 +494,15 @@
             console.log('✅ Selected crypto:', currency);
         };
 
-        // Глобальная функция копирования адреса
         window.copyAddress = function () {
             if (!paymentData || !paymentData.address) {
-                alert('No address available');
+                // Вместо alert - перенаправляем на страницу TryBit
+                if (paymentData && paymentData.paymentLink) {
+                    alert('Address is available on the TryBit payment page. Opening it now...');
+                    window.open(paymentData.paymentLink, '_blank');
+                } else {
+                    alert('No address available yet. Please wait...');
+                }
                 return;
             }
 
@@ -503,9 +511,6 @@
                 const original = btn.innerHTML;
                 btn.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
                 setTimeout(() => btn.innerHTML = original, 2000);
-            }).catch(err => {
-                console.error('Failed to copy:', err);
-                alert('Failed to copy address');
             });
         };
 

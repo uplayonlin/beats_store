@@ -1065,6 +1065,7 @@ app.post('/api/trybit-webhook', express.json({ type: 'application/json' }), (req
     const { body } = req;
 
     console.log('🔔 TryBit webhook received:', body);
+    console.log('📦 Webhook body:', JSON.stringify(req.body, null, 2));
 
     // Проверяем JWT токен
     if (body.token) {
