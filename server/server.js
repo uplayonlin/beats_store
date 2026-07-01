@@ -1,4 +1,3 @@
-ВОТ МОЙ server.js дай уже готовый под cryptomus
 //.env
 require('dotenv').config();
 
