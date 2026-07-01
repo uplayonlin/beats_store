@@ -976,11 +976,27 @@ const trybit = new TryBitPayment(
 
 // Создать крипто-платёж
 app.post('/api/crypto/create', async (req, res) => {
+    console.log('🔔 Crypto create request received');
+    console.log('📦 Request body:', req.body);
+    console.log('📦 Headers:', req.headers);
+
     const { orderId, amount, email, cryptocurrency } = req.body;
 
+    console.log('🔍 Parsed values:');
+    console.log('  - orderId:', orderId, typeof orderId);
+    console.log('  - amount:', amount, typeof amount);
+    console.log('  - email:', email, typeof email);
+    console.log('  - cryptocurrency:', cryptocurrency);
+
     if (!orderId || !amount || !email) {
+        console.error('❌ Missing required fields!');
+        console.error('  orderId:', orderId);
+        console.error('  amount:', amount);
+        console.error('  email:', email);
+
         return res.status(400).json({
-            error: 'Order ID, amount and email are required'
+            error: 'Order ID, amount and email are required',
+            received: { orderId, amount, email }
         });
     }
 
