@@ -969,10 +969,10 @@ app.put('/api/orders/:id/cancel', requireAuth, (req, res) => {
 const TryBitPayment = require('./trybit');
 // 🔍 Логирование для отладки (ключи маскируются)
 console.log('🔑 TryBit Configuration:');
-console.log('  - API Key:', process.env.TRYBIT_API_KEY ? 
+console.log('  - API Key:', process.env.TRYBIT_API_KEY ?
     process.env.TRYBIT_API_KEY.substring(0, 10) + '...' : '❌ NOT SET');
 console.log('  - Shop ID:', process.env.TRYBIT_SHOP_ID || '❌ NOT SET');
-console.log('  - Secret Key:', process.env.TRYBIT_SECRET_KEY ? 
+console.log('  - Secret Key:', process.env.TRYBIT_SECRET_KEY ?
     process.env.TRYBIT_SECRET_KEY.substring(0, 10) + '...' : '❌ NOT SET');
 
 const trybit = new TryBitPayment(
@@ -1169,7 +1169,94 @@ app.get('/api/crypto/status/:invoiceUuid', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+// ============================================
+// DOWNLOAD PURCHASED ITEMS
+// ============================================
 
+// Скачать файл из заказа (после оплаты)
+app.get('/api/orders/:orderId/download/:type/:itemId', (req, res) => {
+    const { orderId, type, itemId } = req.params;
+
+    console.log(`📥 Download request: Order #${orderId}, Type: ${type}, Item ID: ${itemId}`);
+
+    // Проверяем что заказ оплачен
+    db.get('SELECT * FROM orders WHERE id = ? AND status = ?', [orderId, 'paid'], (err, order) => {
+        if (err) {
+            console.error('❌ DB Error:', err.message);
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        if (!order) {
+            console.error('❌ Order not found or not paid');
+            return res.status(404).json({ error: 'Order not found or not paid' });
+        }
+
+        // Проверяем email (опционально)
+        // Можно добавить проверку что email совпадает
+
+        // Определяем путь к файлу в зависимости от типа
+        let filePath = null;
+        let fileName = null;
+
+        if (type === 'beat') {
+            db.get('SELECT * FROM beats WHERE id = ?', [itemId], (err, beat) => {
+                if (err || !beat) {
+                    return res.status(404).json({ error: 'Beat not found' });
+                }
+
+                filePath = path.join(__dirname, '..', beat.audio);
+                fileName = `${beat.title}.mp3`;
+
+                console.log('📁 Serving beat:', filePath);
+
+                if (!fs.existsSync(filePath)) {
+                    console.error('❌ File not found:', filePath);
+                    return res.status(404).json({ error: 'File not found' });
+                }
+
+                res.download(filePath, fileName);
+            });
+        } else if (type === 'drumkit') {
+            db.get('SELECT * FROM drumkits WHERE id = ?', [itemId], (err, kit) => {
+                if (err || !kit) {
+                    return res.status(404).json({ error: 'Drumkit not found' });
+                }
+
+                filePath = path.join(__dirname, '..', kit.archive);
+                fileName = `${kit.title}.zip`;
+
+                console.log('📁 Serving drumkit:', filePath);
+
+                if (!fs.existsSync(filePath)) {
+                    console.error('❌ File not found:', filePath);
+                    return res.status(404).json({ error: 'File not found' });
+                }
+
+                res.download(filePath, fileName);
+            });
+        } else if (type === 'samplekit') {
+            db.get('SELECT * FROM samplekits WHERE id = ?', [itemId], (err, kit) => {
+                if (err || !kit) {
+                    return res.status(404).json({ error: 'Samplekit not found' });
+                }
+
+                filePath = path.join(__dirname, '..', kit.archive);
+                fileName = `${kit.title}.zip`;
+
+                console.log('📁 Serving samplekit:', filePath);
+
+                if (!fs.existsSync(filePath)) {
+                    console.error('❌ File not found:', filePath);
+                    return res.status(404).json({ error: 'File not found' });
+                }
+
+                res.download(filePath, fileName);
+            });
+        } else {
+            res.status(400).json({ error: 'Invalid item type' });
+        }
+    });
+});
 // ============================================
 // СТАТИЧЕСКИЕ ФАЙЛЫ И РОУТЫ
 // ============================================
