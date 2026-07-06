@@ -1,6 +1,6 @@
 # 🎵 Beats Store
-
-Веб-сайт для продажи музыкальных битов, драмкитов и семплкитов. Функционал аналогичен Beatstars — личный магазин для продажи музыки.
+###work in progress
+Веб-сайт для продажи музыкальных битов, драмкитов и семплкитов. Функционал аналогичен BeatStars Pro Page — личный магазин для продажи музыки.
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-48%25-yellow)
 ![HTML](https://img.shields.io/badge/HTML-37.7%25-orange)
