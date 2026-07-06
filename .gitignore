@@ -29,6 +29,7 @@ source/videos/samplekits/
 source/zip/
 
 # Загружаем только логотип и основные картинки
+!source/screenshots/*
 !source/images/logo.png
 !source/images/beats.png
 !source/images/drum-kit.png
