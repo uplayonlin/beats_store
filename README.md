@@ -1,6 +1,22 @@
 # 🎵 Beats Store
 ###work in progress
 Веб-сайт для продажи музыкальных битов, драмкитов и семплкитов. Функционал аналогичен BeatStars Pro Page — личный магазин для продажи музыки.
+## 📸 Скриншоты
+
+### 🏠 Главная страница
+![Главная страница](source/screenshots/home_page.png)
+
+### 🎵 Каталог битов
+![Каталог битов](source/screenshots/beats_page.png)
+
+### 🥁 Драмкиты
+![Драмкиты](source/screenshots/drumkits_page.png)
+
+### 🔐 Админ-панель
+![Админ-панель](source/screenshots/adminpanel_page.png)
+
+### 💳 Крипто-оплата
+![Оплата](source/screenshots/trybit.png)
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-48%25-yellow)
 ![HTML](https://img.shields.io/badge/HTML-37.7%25-orange)
