@@ -16,7 +16,11 @@
 ![Админ-панель](source/screenshots/adminpanel_page.png)
 
 ### 💳 Крипто-оплата
-![Оплата](source/screenshots/trybit.png)
+![CART](source/screenshots/cart.png)
+![CART](source/screenshots/cart2.png)
+![Оплата Trybit](source/screenshots/trybit1.png)
+![Оплата Trybit](source/screenshots/trybit2.png)
+![Успешная Оплата](source/screenshots/payment_conf.png)
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-48%25-yellow)
 ![HTML](https://img.shields.io/badge/HTML-37.7%25-orange)
